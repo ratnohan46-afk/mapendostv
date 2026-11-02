@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0b10">
+<title>MAPENDOS TV</title>
+<meta name="description" content="MAPENDOS TV — siaran langsung otomatis tampil saat channel mulai live.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b10; --surf:#15151d; --line:#25252f; --text:#f4f3f8; --sub:#9a98ad;
+  --purple:#8b3dff; --purple2:#a468ff; --red:#ff2e4d;
+  --font:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.4;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer;text-align:left}
+:focus-visible{outline:2px solid var(--purple2);outline-offset:2px}
+.wrap{padding:0 40px}
+
+/* navbar */
+.nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:28px;padding:14px 40px;background:linear-gradient(#0b0b10f2,#0b0b10cc);backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;letter-spacing:-.3px;border:1px solid var(--line);border-radius:8px;padding:6px 12px;flex-shrink:0}
+.logo i{width:22px;height:16px;border-radius:4px;background:linear-gradient(135deg,var(--purple),var(--red));display:grid;place-items:center}
+.logo i::after{content:"";border-left:6px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:1px}
+.links{display:flex;gap:26px;flex:1;justify-content:center}
+.links a{font-weight:500;color:var(--sub);padding:6px 0;border-bottom:2px solid transparent}
+.links a:hover,.links a.act{color:var(--text);border-color:var(--purple)}
+.search{display:flex;align-items:center;gap:8px;background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:0 12px;height:34px;width:200px}
+.search:focus-within{border-color:var(--purple)}
+.search input{background:none;border:0;outline:none;width:100%}
+.search input::placeholder{color:#6d6b80}
+.cta{background:var(--purple);color:#fff;font-weight:600;border-radius:8px;height:34px;padding:0 16px;display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0}
+.cta .d{width:8px;height:8px;border-radius:50%;background:#ffffff80}
+.cta.on .d{background:#fff;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 7px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+/* hero */
+.hero{position:relative;height:clamp(340px,58vh,540px);margin-top:-1px;overflow:hidden;background:#120a22}
+.hero .bg{position:absolute;inset:0;background-size:cover;background-position:center 25%;transition:opacity .5s}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#0b0b10 5%,#0b0b10b8 38%,transparent 75%),linear-gradient(0deg,#0b0b10 0,transparent 35%)}
+.hero.none .bg{background:radial-gradient(ellipse at 75% 30%,rgba(139,61,255,.45),transparent 60%),radial-gradient(ellipse at 90% 90%,rgba(255,46,77,.3),transparent 55%)}
+.hc{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:620px;padding:0 40px}
+.kick{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13px;color:#fff;background:var(--red);padding:3px 10px;border-radius:5px;align-self:flex-start}
+.hc h1{font-weight:800;font-size:clamp(26px,4.6vw,52px);line-height:1.08;letter-spacing:-1px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hc p{color:#cfcde0;font-size:15px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.b{height:40px;padding:0 20px;border-radius:8px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.b.p{background:var(--purple);color:#fff}
+.b.p:hover{background:var(--purple2)}
+.b.o{border:1px solid #ffffff55;background:#ffffff0d}
+.b.o:hover{background:#ffffff22}
+.chn{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:13px}
+.av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--red));display:grid;place-items:center;font-weight:800;font-size:11px;color:#fff}
+.dots{position:absolute;z-index:3;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px}
+.dots button{width:6px;height:6px;border-radius:3px;background:#ffffff55;padding:0}
+.dots button.act{width:18px;background:var(--purple2)}
+
+/* rows */
+.sec{margin-top:30px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sh h2{font-size:17px;font-weight:600}
+.arr{display:flex;gap:6px}
+.arr button{width:28px;height:28px;border-radius:50%;background:var(--surf);border:1px solid var(--line);display:grid;place-items:center;color:var(--sub)}
+.arr button:hover{color:#fff;border-color:var(--purple)}
+.row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-bottom:4px}
+.row::-webkit-scrollbar{display:none}
+.card{flex:0 0 230px;scroll-snap-align:start;display:block}
+.th{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#1c1033,#2d0f1c);display:grid;place-items:center}
+.th img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+.card:hover .th img{transform:scale(1.04)}
+.th .ini{font-size:34px;font-weight:800;color:#ffffff2a}
+.th::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#000a,transparent 55%)}
+.play{position:absolute;z-index:2;left:8px;bottom:8px;width:24px;height:24px;border-radius:50%;background:#ffffffd9;display:grid;place-items:center}
+.play::after{content:"";border-left:7px solid #111;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;margin-left:2px}
+.tag{position:absolute;z-index:2;right:8px;top:8px;background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:4px}
+.card.off .th{filter:saturate(.3) brightness(.8)}
+.cn{margin-top:8px;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs{color:var(--sub);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* tiles */
+.tile{flex:0 0 200px;height:84px;border-radius:10px;padding:14px;font-weight:800;font-size:15px;display:flex;align-items:flex-end;scroll-snap-align:start;color:#fff;position:relative;overflow:hidden}
+.tile small{position:absolute;top:10px;right:10px;font-size:10px;font-weight:800;background:#0006;padding:1px 7px;border-radius:4px}
+.tile span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{color:var(--sub);padding:18px 0}
+footer{margin:40px 40px 0;padding:18px 0 28px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:#000d;display:none;place-items:center;padding:16px}
+.modal.open{display:grid}
+.mb{width:min(1000px,100%)}
+.mv{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
+.mv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mt{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px}
+.mt h3{font-size:16px;font-weight:600}
+.x{width:36px;height:36px;border-radius:50%;background:var(--surf);border:1px solid var(--line);display:grid;place-items:center;flex-shrink:0;font-size:18px;text-align:center}
+.x:hover{border-color:var(--purple)}
+
+@media (max-width:860px){
+  .nav{padding:12px 16px;gap:12px}
+  .links{display:none}
+  .search{flex:1;width:auto}
+  .wrap{padding:0 16px}
+  .hc{padding:0 16px}
+  .hero::before{background:linear-gradient(0deg,#0b0b10 8%,#0b0b10a0 55%,#0b0b1040)}
+  .hc{justify-content:flex-end;padding-bottom:36px}
+  footer{margin:32px 16px 0}
+  .card{flex-basis:200px}
+}
+@media (max-width:480px){.cta b{display:none}.cta{padding:0 12px}}
+@media (prefers-reduced-motion:reduce){.cta.on .d{animation:none}html{scroll-behavior:auto}.card:hover .th img{transform:none}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="/" aria-label="MAPENDOS TV"><i></i>MAPENDOS TV</a>
+  <nav class="links">
+    <a href="#top" class="act">Beranda</a>
+    <a href="#live">Live</a>
+    <a href="#semua">Channel</a>
+  </nav>
+  <label class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8d8ba3" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Cari channel" aria-label="Cari channel" autocomplete="off"></label>
+  <a class="cta" id="cta" href="#live" role="status"><span class="d"></span><b id="cta-t">Memuat…</b></a>
+</header>
+
+<section class="hero none" id="top"><div class="bg" id="hbg"></div><div class="hc" id="hc"></div><div class="dots" id="dots"></div></section>
+
+<main class="wrap">
+  <section class="sec" id="live">
+    <div class="sh"><h2>Sedang Live</h2><div class="arr"><button data-s="r1" data-d="-1" aria-label="Geser kiri">‹</button><button data-s="r1" data-d="1" aria-label="Geser kanan">›</button></div></div>
+    <div class="row" id="r1"></div>
+  </section>
+  <section class="sec" id="semua">
+    <div class="sh"><h2>Semua Channel</h2><div class="arr"><button data-s="r2" data-d="-1" aria-label="Geser kiri">‹</button><button data-s="r2" data-d="1" aria-label="Geser kanan">›</button></div></div>
+    <div class="row" id="r2"></div>
+  </section>
+  <section class="sec">
+    <div class="sh"><h2>Jelajahi Channel</h2></div>
+    <div class="row" id="r3"></div>
+  </section>
+</main>
+<footer><span>MAPENDOS TV</span><span id="checked">Status diperbarui otomatis tiap 30 detik</span></footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Pemutar siaran">
+  <div class="mb"><div class="mv" id="mv"></div><div class="mt"><h3 id="mtitle"></h3><button class="x" id="mx" aria-label="Tutup">✕</button></div></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ini = c => esc((c.name || '?').trim().charAt(0).toUpperCase());
+const GRAD = ['#8b3dff,#4b1fb8','#ff2e4d,#a3123a','#3d6bff,#1b2f9e','#c23dff,#ff2e8a','#ff7a2e,#c4153a','#2ec4a0,#1b5fb8','#6d3dff,#ff2e4d','#d63dff,#5b1fb8'];
+
+let channels = [], heroId = null, heroTimer = null, query = '';
+const live = () => channels.filter(c => c.isLive);
+const ytUrl = c => c.isLive && c.videoId ? `https://www.youtube.com/watch?v=${encodeURIComponent(c.videoId)}` : `https://www.youtube.com/channel/${encodeURIComponent(c.id)}${c.isLive ? '/live' : ''}`;
+const thumb = c => c.isLive && c.videoId
+  ? `<img src="https://i.ytimg.com/vi/${esc(c.videoId)}/mqdefault_live.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${esc(c.videoId)}/mqdefault.jpg'">`
+  : `<span class="ini">${ini(c)}</span>`;
+
+async function load() {
+  try {
+    const d = await (await fetch('/api/live', { cache: 'no-store' })).json();
+    channels = (d.channels || []).sort((a, b) => (b.isLive - a.isLive) || a.name.localeCompare(b.name));
+    if (!live().some(c => c.id === heroId)) heroId = (live()[0] || {}).id || null;
+    render();
+    if (d.checkedAt) $('checked').textContent = 'Dicek terakhir ' + new Date(d.checkedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' · diperbarui otomatis';
+  } catch { $('cta-t').textContent = 'Gagal memuat'; }
+}
+
+function render() {
+  const lv = live();
+  $('cta').classList.toggle('on', lv.length > 0);
+  $('cta-t').textContent = lv.length ? `${lv.length} Live sekarang` : 'Belum ada live';
+  renderHero();
+
+  const q = query.toLowerCase();
+  const f = channels.filter(c => c.name.toLowerCase().includes(q));
+  const card = c => c.isLive
+    ? `<button class="card" data-id="${esc(c.id)}"><div class="th">${thumb(c)}<span class="tag">LIVE</span><span class="play"></span></div><div class="cn">${esc(c.title || 'Sedang siaran')}</div><div class="cs">${esc(c.name)}</div></button>`
+    : `<a class="card off" href="${ytUrl(c)}" target="_blank" rel="noopener"><div class="th">${thumb(c)}</div><div class="cn">${esc(c.name)}</div><div class="cs">Offline · buka di YouTube</div></a>`;
+  const note = t => `<p class="empty">${t}</p>`;
+
+  const fl = f.filter(c => c.isLive);
+  $('r1').innerHTML = fl.length ? fl.map(card).join('') : note(lv.length ? 'Tidak ada hasil.' : 'Belum ada channel yang live. Halaman ini memeriksa otomatis.');
+  $('r2').innerHTML = f.length ? f.map(card).join('') : note(channels.length ? 'Tidak ada channel yang cocok.' : 'Belum ada channel yang terdaftar.');
+  $('r3').innerHTML = f.map((c, i) => {
+    const g = GRAD[i % GRAD.length];
+    return c.isLive
+      ? `<button class="tile" style="background:linear-gradient(135deg,${g})" data-id="${esc(c.id)}"><small>LIVE</small><span>${esc(c.name)}</span></button>`
+      : `<a class="tile" style="background:linear-gradient(135deg,${g})" href="${ytUrl(c)}" target="_blank" rel="noopener"><span>${esc(c.name)}</span></a>`;
+  }).join('');
+}
+
+function renderHero() {
+  const lv = live(), c = lv.find(x => x.id === heroId), hero = $('top');
+  hero.classList.toggle('none', !c);
+  clearInterval(heroTimer);
+  if (!c) {
+    $('hbg').style.backgroundImage = '';
+    $('hc').innerHTML = `<h1>Belum ada siaran langsung</h1><p>Siaran akan tampil di sini otomatis begitu salah satu channel mulai live.</p><div class="btns"><a class="b p" href="#semua">Lihat channel</a></div>`;
+    $('dots').innerHTML = '';
+    return;
+  }
+  if (c.videoId) {
+    const v = encodeURIComponent(c.videoId);
+    $('hbg').style.backgroundImage = `url(https://i.ytimg.com/vi/${v}/maxresdefault_live.jpg),url(https://i.ytimg.com/vi/${v}/hqdefault_live.jpg)`;
+  } else $('hbg').style.backgroundImage = '';
+  $('hc').innerHTML = `<span class="kick">● LIVE SEKARANG</span><h1>${esc(c.title || 'Sedang siaran')}</h1>
+    <div class="chn"><span class="av">${ini(c)}</span>${esc(c.name)}</div>
+    <div class="btns"><button class="b p" data-id="${esc(c.id)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M6 4l14 8-14 8z"/></svg>Tonton Sekarang</button><a class="b o" href="${ytUrl(c)}" target="_blank" rel="noopener">Buka di YouTube</a></div>`;
+  $('dots').innerHTML = lv.length > 1 ? lv.map(x => `<button class="${x.id === heroId ? 'act' : ''}" data-hero="${esc(x.id)}" aria-label="${esc(x.name)}"></button>`).join('') : '';
+  if (lv.length > 1) heroTimer = setInterval(() => {
+    if ($('modal').classList.contains('open')) return;
+    const l = live(), i = l.findIndex(x => x.id === heroId);
+    heroId = l[(i + 1) % l.length].id; renderHero();
+  }, 8000);
+}
+
+function openPlayer(id) {
+  const c = channels.find(x => x.id === id); if (!c) return;
+  const base = c.videoId ? `https://www.youtube.com/embed/${encodeURIComponent(c.videoId)}?` : `https://www.youtube.com/embed/live_stream?channel=${encodeURIComponent(c.id)}&`;
+  $('mv').innerHTML = `<iframe src="${base}autoplay=1&rel=0" title="${esc(c.name)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  $('mtitle').textContent = `${c.name} — ${c.title || 'Sedang siaran'}`;
+  $('modal').classList.add('open'); $('mx').focus();
+}
+function closePlayer() { $('modal').classList.remove('open'); $('mv').innerHTML = ''; }
+
+document.addEventListener('click', e => {
+  const h = e.target.closest('[data-hero]');
+  if (h) { heroId = h.dataset.hero; renderHero(); return; }
+  const s = e.target.closest('[data-s]');
+  if (s) { const r = $(s.dataset.s); r.scrollBy({ left: r.clientWidth * .8 * s.dataset.d, behavior: 'smooth' }); return; }
+  const p = e.target.closest('button[data-id]');
+  if (p) openPlayer(p.dataset.id);
+  if (e.target === $('modal')) closePlayer();
+});
+$('mx').addEventListener('click', closePlayer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlayer(); });
+$('q').addEventListener('input', e => { query = e.target.value.trim(); render(); });
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
